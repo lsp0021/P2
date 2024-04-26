@@ -67,7 +67,7 @@ class Book(Media):
         self.__publisher = publisher
 
     # override the print function
-    def __str__(self):
+    def getString(self):
         message = ""
         message += "Title:\n"
         message += self.get_title() + "\n"

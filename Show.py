@@ -81,7 +81,7 @@ class Show(Media):
         self.__description = description
 
     # override the print function
-    def __str__(self):
+    def getString(self):
         message = ""
         message += "Title:\n"
         message += self.get_title() + "\n"
