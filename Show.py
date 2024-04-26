@@ -1,3 +1,7 @@
+# Author: Suqi Lu
+# Latest modified date: 4/26/2024
+# Description: The Show class
+
 from Media import Media 
 
 class Show(Media):
@@ -75,3 +79,31 @@ class Show(Media):
 
     def set_description(self, description):
         self.__description = description
+
+    # override the print function
+    def __str__(self):
+        message = ""
+        message += "Title:\n"
+        message += self.get_title() + "\n"
+        message += "Directors:\n"
+        message += self.get_directors() + "\n"
+        message += "Average Rating:\n"
+        message += self.get_average_rate() + "\n"
+        message += "Actors:\n"
+        message += self.get_actors() + "\n"
+        message += "Country Code:\n"
+        message += self.get_country_code() + "\n"
+        message += "Date Added:\n"
+        message += self.get_date_added() + "\n"
+        message += "Released Year:\n"
+        message += self.get_year_released() + "\n"
+        message += "Rating:\n"
+        message += self.get_rating() + "\n"
+        message += "Duration:\n"
+        message += self.get_duration() + "\n"
+        message += "Genres:\n"
+        message += self.get_genres() + "\n"
+        message += "Description:\n"
+        message += self.get_description()
+        return message
+

@@ -1,3 +1,7 @@
+# Author: Suqi Lu
+# Latest modified date: 4/26/2024
+# Description: The Book class 
+
 from Media import Media 
 
 class Book(Media):
@@ -61,3 +65,28 @@ class Book(Media):
 
     def set_publisher(self, publisher):
         self.__publisher = publisher
+
+    # override the print function
+    def __str__(self):
+        message = ""
+        message += "Title:\n"
+        message += self.get_title() + "\n"
+        message += "Author:\n"
+        message += self.get_authors() + "\n"
+        message += "Average Rating:\n"
+        message += self.get_average_rate() + "\n"
+        message += "ISBN:\n"
+        message += self.get_isbn() + "\n"
+        message += "ISBN13:\n"
+        message += self.get_isbn13() + "\n"
+        message += "Language Code:\n"
+        message += self.get_language_code() + "\n"
+        message += "Pages:\n"
+        message += self.get_num_pages() + "\n"
+        message += "Rating Count:\n"
+        message += self.get_num_ratings() + "\n"
+        message += "Publication Date:\n"
+        message += self.get_publication_date() + "\n"
+        message += "Publisher:\n"
+        message += self.get_publisher()
+        return message

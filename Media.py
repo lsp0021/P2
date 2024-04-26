@@ -1,3 +1,6 @@
+# Author: Suqi Lu
+# Latest modified date: 4/26/2024
+# Description: The Media class
 
 class Media():
 
