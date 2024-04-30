@@ -1,3 +1,8 @@
+#Author: Kartikey
+# Latest modified date: 4/30/2024
+# Description: GUI for project2
+
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
