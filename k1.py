@@ -3,9 +3,13 @@ from tkinter import ttk
 from tkinter import messagebox
 
 
+class RecommenderGui:
+    pass
+
+
 class RecommenderGUI:
     def __init__(self):
-        self.recommender = Recommender()
+        self.Recommender = RecommenderGui()
 
         # Create main window
         self.main_window = tk.Tk()
