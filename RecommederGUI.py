@@ -1,4 +1,4 @@
-#Author: Kartikey, Paul
+#Author: Kartikey
 # Latest modified date: 4/30/2024
 # Description: GUI for project2
 
@@ -78,13 +78,19 @@ class RecommenderGUI:
 
         media_type_combobox = ttk.Combobox(recommendation_tab, values=["Movie", "TV Show", "Book"])
         media_type_combobox.pack()
+        title_entry_label = tk.Label(recommendation_tab, text="Title Entry:")
+        title_entry_label.pack()
         title_entry = ttk.Entry(recommendation_tab, width=50)
         title_entry.pack()
         recommend_btn = ttk.Button(recommendation_tab, text="Get Recommendations", command= lambda: self.recommender.getRecommendations(media_type_combobox.get(),title_entry.get()))
         recommend_btn.pack()
 
-        recommendation_label = tk.Label(recommendation_tab, text="blank")
-        recommendation_label.pack()
+        self.recommendationText = tk.Text(recommendation_tab, width=100, height=20)
+        self.recommendationText.pack()
+        self.recommendationText.insert(tk.END,"Reccomendation Data")
+        self.recommendationText.config(state=tk.DISABLED)
+
+
 
     def create_buttons(self):
         button_frame = tk.Frame(self.main_window)
@@ -133,10 +139,18 @@ class RecommenderGUI:
 
     def load_associations(self):
         # Implement loading associations
-        pass
+        self.recommender.loadAssociations()
+
+
 
     def credit_info_box(self):
         # Implement credit info dialog
+        creditInfo = ("Created by: "
+                      "\nSugi Lu, "
+                      "Kartikey Singh, & "
+                      "Paul Leible"
+                      "\non 5/2/2024")
+        messagebox.showinfo("Credit Info",creditInfo)
         pass
 
     def search_shows(self):
@@ -149,6 +163,7 @@ class RecommenderGUI:
 
     def get_recommendations(self):
         # Implement getting recommendations
+        self.recommender.getRecommendations()
         pass
 
 
