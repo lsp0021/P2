@@ -1,0 +1,267 @@
+#Author: Kartikey and Paul
+# Latest modified date: 5/1/24
+# Description: GUI for project2
+
+
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
+from Recommender import Recommender
+
+
+class RecommenderGUI:
+    def __init__(self):
+        self.recommender = Recommender()
+
+        # Create main window
+        self.main_window = tk.Tk()
+        self.main_window.title("Media Recommender")
+        self.main_window.geometry("1200x650")
+
+        # Create notebook
+        self.notebook = ttk.Notebook(self.main_window)
+        self.notebook.pack(expand=True, fill=tk.BOTH)
+
+        # Create tabs
+        self.create_movie_tab()
+        self.create_tv_show_tab()
+        self.create_book_tab()
+        self.create_show_search_tab()
+        self.create_book_search_tab()
+        self.create_recommendation_tab()
+
+        # Create buttons
+        self.create_buttons()
+
+    def create_movie_tab(self):
+        movie_tab = ttk.Frame(self.notebook)
+        self.notebook.add(movie_tab, text="Movies")
+        # Add widgets for displaying movie data
+        self.movieText = tk.Text(movie_tab, width=130, height=20)
+        self.movieText.grid(row=0, column=0, padx=10, pady=10)
+
+        self.movieText.insert(tk.END, "Movie Data")
+        self.movieText.config(state=tk.DISABLED)
+
+
+    def create_tv_show_tab(self):
+        tv_show_tab = ttk.Frame(self.notebook)
+        self.notebook.add(tv_show_tab, text="TV Shows")
+        # Add widgets for displaying TV show data
+        self.tvText = tk.Text(tv_show_tab, width=130, height=20)
+        self.tvText.grid(row=0, column=0, padx=10, pady=10)
+
+        self.tvText.insert(tk.END, "TV Data")
+        self.tvText.config(state=tk.DISABLED)
+
+
+    def create_book_tab(self):
+        book_tab = ttk.Frame(self.notebook)
+        self.notebook.add(book_tab, text="Books")
+        # Add widgets for displaying book data
+        self.bookText = tk.Text(book_tab, width=130, height=20)
+        self.bookText.grid(row=0, column=0, padx=10, pady=10)
+
+        self.bookText.insert(tk.END, "Book Data")
+        self.bookText.config(state=tk.DISABLED)
+
+    def create_show_search_tab(self):
+        search_tab = ttk.Frame(self.notebook)
+        self.notebook.add(search_tab, text="Movie & TV Search")
+        # Add widgets for searching movies and TV shows
+        searchLabel = ttk.Label(search_tab, text="Search Media")
+        searchLabel.pack()
+
+        self.media_type_combobox_shows_search = ttk.Combobox(search_tab, values=["Movie", "TV Show"])
+        self.media_type_combobox_shows_search.pack()
+        title_entry_label = tk.Label(search_tab, text="Title Entry:")
+        title_entry_label.pack()
+        self.title_entry_shows_search = ttk.Entry(search_tab, width=50)
+        self.title_entry_shows_search.pack()
+
+        director_entry_label = tk.Label(search_tab, text="Director Entry:")
+        director_entry_label.pack()
+        self.director_entry_shows_search = ttk.Entry(search_tab, width=50)
+        self.director_entry_shows_search.pack()
+
+        actor_entry_label = tk.Label(search_tab, text="Actor Entry:")
+        actor_entry_label.pack()
+        self.actor_entry_shows_search = ttk.Entry(search_tab, width=50)
+        self.actor_entry_shows_search.pack()
+
+        genre_entry_label = tk.Label(search_tab, text="Genre Entry:")
+        genre_entry_label.pack()
+        self.genre_entry_shows_search = ttk.Entry(search_tab, width=50)
+        self.genre_entry_shows_search.pack()
+
+        search_button = ttk.Button(search_tab, text="Search",
+                                   command=lambda: self.search_shows())
+        search_button.pack()
+
+        self.searchShowText = tk.Text(search_tab, width=130, height=20)
+        self.searchShowText.pack()
+        self.searchShowText.insert(tk.END, "Movie & TV Search Data")
+        self.searchShowText.config(state=tk.DISABLED)
+
+    def create_book_search_tab(self):
+        search_tab = ttk.Frame(self.notebook)
+        self.notebook.add(search_tab, text="Book Search")
+        # Add widgets for searching movies and TV shows
+        searchLabel = ttk.Label(search_tab, text="Search Books")
+        searchLabel.pack()
+
+        title_entry_label = tk.Label(search_tab, text="Title Entry:")
+        title_entry_label.pack()
+        self.title_entry_book_search = ttk.Entry(search_tab, width=50)
+        self.title_entry_book_search.pack()
+
+        author_entry_label = tk.Label(search_tab, text="Author Entry:")
+        author_entry_label.pack()
+        self.author_entry_book_search = ttk.Entry(search_tab, width=50)
+        self.author_entry_book_search.pack()
+
+        publisher_entry_label = tk.Label(search_tab, text="Publisher Entry:")
+        publisher_entry_label.pack()
+        self.publisher_entry_book_search = ttk.Entry(search_tab, width=50)
+        self.publisher_entry_book_search.pack()
+
+        search_button = ttk.Button(search_tab, text="Search",
+                                   command=lambda: self.search_books())
+        search_button.pack()
+
+        self.searchBookText = tk.Text(search_tab, width=130, height=20)
+        self.searchBookText.pack()
+        self.searchBookText.insert(tk.END, "Book Search Data")
+        self.searchBookText.config(state=tk.DISABLED)
+
+    def create_recommendation_tab(self):
+        recommendation_tab = ttk.Frame(self.notebook)
+        self.notebook.add(recommendation_tab, text="Recommendations")
+        # Add widgets for getting recommendations
+        recommendationLabel = ttk.Label(recommendation_tab,text="Reccomneded Media")
+        recommendationLabel.pack()
+
+        self.media_type_combobox_reccomend = ttk.Combobox(recommendation_tab, values=["Movie", "TV Show", "Book"])
+        self.media_type_combobox_reccomend.pack()
+        title_entry_label = tk.Label(recommendation_tab, text="Title Entry:")
+        title_entry_label.pack()
+        title_entry = ttk.Entry(recommendation_tab, width=50)
+        title_entry.pack()
+        recommend_btn = ttk.Button(recommendation_tab, text="Get Recommendations", command= lambda: self.recommender.getRecommendations(media_type_combobox.get(),title_entry.get()))
+        recommend_btn.pack()
+
+        self.recommendationText = tk.Text(recommendation_tab, width=130, height=20)
+        self.recommendationText.pack()
+        self.recommendationText.insert(tk.END,"Reccomendation Data")
+        self.recommendationText.config(state=tk.DISABLED)
+
+
+
+    def create_buttons(self):
+        button_frame = tk.Frame(self.main_window)
+        button_frame.pack()
+
+        # Create buttons
+        load_shows_button = tk.Button(button_frame, text="Load Shows", command=self.load_shows)
+        load_shows_button.grid(row=0, column=0)
+
+        load_books_button = tk.Button(button_frame, text="Load Books", command=self.load_books)
+        load_books_button.grid(row=0, column=1)
+
+        load_associations_button = tk.Button(button_frame, text="Load Associations", command=self.load_associations)
+        load_associations_button.grid(row=0, column=2)
+
+        credit_info_button = tk.Button(button_frame, text="Credit Info", command=self.credit_info_box)
+        credit_info_button.grid(row=0, column=3)
+
+        quit_button = tk.Button(button_frame, text="Quit", command=self.main_window.quit)
+        quit_button.grid(row=0, column=4)
+
+    def load_shows(self):
+        # Implement loading shows
+        self.recommender.loadShows()
+        #movie
+        self.movieList=self.recommender.getMovieList()
+        self.movieText.config(state=tk.NORMAL)
+        self.movieText.delete(1.0,tk.END)
+        self.movieText.insert(tk.END, self.movieList)
+        self.movieText.config(state=tk.DISABLED)
+        #tv
+        self.tvList = self.recommender.getTVList()
+        self.tvText.config(state=tk.NORMAL)
+        self.tvText.delete(1.0, tk.END)
+        self.tvText.insert(tk.END, self.tvList)
+        self.tvText.config(state=tk.DISABLED)
+
+
+    def load_books(self):
+        # Implement loading books
+        self.recommender.loadBooks()
+        # books
+        self.bookList = self.recommender.getBookList()
+        self.bookText.config(state=tk.NORMAL)
+        self.bookText.delete(1.0, tk.END)
+        self.bookText.insert(tk.END, self.bookList)
+        self.bookText.config(state=tk.DISABLED)
+
+
+
+    def load_associations(self):
+        # Implement loading associations
+        self.recommender.loadAssociations()
+
+
+
+    def credit_info_box(self):
+        # Implement credit info dialog
+        creditInfo = ("Created by: "
+                      "\nSugi Lu, "
+                      "Kartikey Singh, & "
+                      "Paul Leible"
+                      "\non 5/2/2024")
+        messagebox.showinfo("Credit Info",creditInfo)
+        pass
+
+    def search_shows(self):
+        # Implement search for movies and TV shows
+        type = self.media_type_combobox_shows_search.get()
+        title = self.title_entry_shows_search.get()
+        director = self.director_entry_shows_search.get()
+        actor = self.actor_entry_shows_search.get()
+        genre = self.genre_entry_shows_search.get()
+
+        searchTextNew = self.recommender.searchTVMovies(type,title,director,actor,genre)
+
+        self.searchShowText.config(state=tk.NORMAL)
+        self.searchShowText.delete(1.0,tk.END)
+        self.searchShowText.insert(tk.END,searchTextNew)
+        self.searchShowText.config(state=tk.DISABLED)
+
+
+
+    def search_books(self):
+        # Implement search for books
+        title = self.title_entry_book_search.get()
+        author = self.author_entry_book_search.get()
+        publisher = self.publisher_entry_book_search.get()
+        print(title,author,publisher)
+
+        searchTextNew = self.recommender.searchBooks(title, author, publisher)
+
+        self.searchBookText.config(state=tk.NORMAL)
+        self.searchBookText.delete(1.0, tk.END)
+        self.searchBookText.insert(tk.END, searchTextNew)
+        self.searchBookText.config(state=tk.DISABLED)
+        pass
+
+    def get_recommendations(self):
+        # Implement getting recommendations
+        self.recommender.getRecommendations()
+
+
+
+def main():
+    gui = RecommenderGUI()
+    gui.main_window.mainloop()
+
+main()
