@@ -39,9 +39,13 @@ class RecommenderGUI:
         # Add widgets for displaying movie data
         self.movieText = tk.Text(movie_tab, width=130, height=20)
         self.movieText.grid(row=0, column=0, padx=10, pady=10)
-
         self.movieText.insert(tk.END, "Movie Data")
         self.movieText.config(state=tk.DISABLED)
+
+        self.moveieStats = tk.Text(movie_tab,width=130,height=10)
+        self.moveieStats.grid(row=1, column=0, padx=10, pady=0)
+        self.moveieStats.insert(tk.END,"Movie Stats")
+        self.moveieStats.config(state=tk.DISABLED)
 
 
     def create_tv_show_tab(self):
@@ -53,7 +57,6 @@ class RecommenderGUI:
 
         self.tvText.insert(tk.END, "TV Data")
         self.tvText.config(state=tk.DISABLED)
-
 
     def create_book_tab(self):
         book_tab = ttk.Frame(self.notebook)
@@ -141,21 +144,19 @@ class RecommenderGUI:
         recommendationLabel = ttk.Label(recommendation_tab,text="Reccomneded Media")
         recommendationLabel.pack()
 
-        self.media_type_combobox_reccomend = ttk.Combobox(recommendation_tab, values=["Movie", "TV Show", "Book"])
-        self.media_type_combobox_reccomend.pack()
+        self.media_type_combobox_recommend = ttk.Combobox(recommendation_tab, values=["Movie", "TV Show", "Book"])
+        self.media_type_combobox_recommend.pack()
         title_entry_label = tk.Label(recommendation_tab, text="Title Entry:")
         title_entry_label.pack()
-        title_entry = ttk.Entry(recommendation_tab, width=50)
-        title_entry.pack()
-        recommend_btn = ttk.Button(recommendation_tab, text="Get Recommendations", command= lambda: self.recommender.getRecommendations(media_type_combobox.get(),title_entry.get()))
+        self.title_entry_recommend = ttk.Entry(recommendation_tab, width=50)
+        self.title_entry_recommend.pack()
+        recommend_btn = ttk.Button(recommendation_tab, text="Get Recommendations", command= lambda: self.get_recommendations())
         recommend_btn.pack()
 
         self.recommendationText = tk.Text(recommendation_tab, width=130, height=20)
         self.recommendationText.pack()
         self.recommendationText.insert(tk.END,"Reccomendation Data")
         self.recommendationText.config(state=tk.DISABLED)
-
-
 
     def create_buttons(self):
         button_frame = tk.Frame(self.main_window)
@@ -186,6 +187,13 @@ class RecommenderGUI:
         self.movieText.delete(1.0,tk.END)
         self.movieText.insert(tk.END, self.movieList)
         self.movieText.config(state=tk.DISABLED)
+
+        self.movieStatList=self.recommender.getMovieStats()
+        self.moveieStats.config(state=tk.NORMAL)
+        self.moveieStats.delete(1.0,tk.END)
+        self.moveieStats.insert(tk.END,self.movieStatList)
+        self.moveieStats.config(state=tk.DISABLED)
+
         #tv
         self.tvList = self.recommender.getTVList()
         self.tvText.config(state=tk.NORMAL)
@@ -205,12 +213,9 @@ class RecommenderGUI:
         self.bookText.config(state=tk.DISABLED)
 
 
-
     def load_associations(self):
         # Implement loading associations
         self.recommender.loadAssociations()
-
-
 
     def credit_info_box(self):
         # Implement credit info dialog
@@ -244,7 +249,6 @@ class RecommenderGUI:
         title = self.title_entry_book_search.get()
         author = self.author_entry_book_search.get()
         publisher = self.publisher_entry_book_search.get()
-        print(title,author,publisher)
 
         searchTextNew = self.recommender.searchBooks(title, author, publisher)
 
@@ -256,7 +260,15 @@ class RecommenderGUI:
 
     def get_recommendations(self):
         # Implement getting recommendations
-        self.recommender.getRecommendations()
+        type = self.media_type_combobox_recommend.get()
+        title = self.title_entry_recommend.get()
+        recommendTextNew = self.recommender.getRecommendations(type,title)
+
+        self.recommendationText.config(state=tk.NORMAL)
+        self.recommendationText.delete(1.0, tk.END)
+        self.recommendationText.insert(tk.END, recommendTextNew)
+        self.recommendationText.config(state=tk.DISABLED)
+
 
 
 
