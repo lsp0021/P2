@@ -1,4 +1,4 @@
-#Author: Kartikey
+#Author: Kartikey and Paul
 # Latest modified date: 5/1/24
 # Description: GUI for project2
 
