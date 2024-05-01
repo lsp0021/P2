@@ -6,15 +6,12 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-
-
-class RecommenderGui:
-    pass
+from Recommender import Recommender
 
 
 class RecommenderGUI:
     def __init__(self):
-        self.Recommender = RecommenderGui()
+        self.recommender = Recommender()
 
         # Create main window
         self.main_window = tk.Tk()
@@ -38,11 +35,23 @@ class RecommenderGUI:
     def create_movie_tab(self):
         movie_tab = ttk.Frame(self.notebook)
         self.notebook.add(movie_tab, text="Movies")
+
+        self.movieText = tk.Text(movie_tab, width=100, height=20)
+        self.movieText.grid(row=0, column=0, padx=10, pady=10)
+
+        self.movieText.insert(tk.END, "Movie Data")
+        self.movieText.config(state=tk.DISABLED)
         # Add widgets for displaying movie data
 
     def create_tv_show_tab(self):
         tv_show_tab = ttk.Frame(self.notebook)
         self.notebook.add(tv_show_tab, text="TV Shows")
+
+        self.tvText = tk.Text(tv_show_tab, width=100, height=20)
+        self.tvText.grid(row=0, column=0, padx=10, pady=10)
+
+        self.tvText.insert(tk.END, "TV Data")
+        self.tvText.config(state=tk.DISABLED)
         # Add widgets for displaying TV show data
 
     def create_book_tab(self):
@@ -59,6 +68,18 @@ class RecommenderGUI:
         recommendation_tab = ttk.Frame(self.notebook)
         self.notebook.add(recommendation_tab, text="Recommendations")
         # Add widgets for getting recommendations
+        recommendationLabel = ttk.Label(recommendation_tab,text="Reccomneded Media")
+        recommendationLabel.pack()
+
+        media_type_combobox = ttk.Combobox(recommendation_tab, values=["Movie", "TV Show", "Book"])
+        media_type_combobox.pack()
+        title_entry = ttk.Entry(recommendation_tab, width=50)
+        title_entry.pack()
+        recommend_btn = ttk.Button(recommendation_tab, text="Get Recommendations", command= lambda: self.recommender.getRecommendations(media_type_combobox.get(),title_entry.get()))
+        recommend_btn.pack()
+
+        recommendation_label = tk.Label(recommendation_tab, text="blank")
+        recommendation_label.pack()
 
     def create_buttons(self):
         button_frame = tk.Frame(self.main_window)
@@ -82,7 +103,18 @@ class RecommenderGUI:
 
     def load_shows(self):
         # Implement loading shows
-        pass
+        self.recommender.loadShows()
+        #movie
+        self.movieList=self.recommender.getMovieList()
+        self.movieText.config(state=tk.NORMAL)
+        self.movieText.delete(1.0,tk.END)
+        self.movieText.insert(tk.END, self.movieList)
+        #tv
+        self.tvList = self.recommender.getTVList()
+        self.tvText.config(state=tk.NORMAL)
+        self.tvText.delete(1.0, tk.END)
+        self.tvText.insert(tk.END, self.tvList)
+        return
 
     def load_books(self):
         # Implement loading books
@@ -114,5 +146,5 @@ def main():
     gui.main_window.mainloop()
 
 
-if __name__ == "__main__":
-    main()
+
+main()
