@@ -1,4 +1,4 @@
-#Author: Kartikey
+#Author: Kartikey, Paul
 # Latest modified date: 4/30/2024
 # Description: GUI for project2
 
@@ -35,29 +35,34 @@ class RecommenderGUI:
     def create_movie_tab(self):
         movie_tab = ttk.Frame(self.notebook)
         self.notebook.add(movie_tab, text="Movies")
-
+        # Add widgets for displaying movie data
         self.movieText = tk.Text(movie_tab, width=100, height=20)
         self.movieText.grid(row=0, column=0, padx=10, pady=10)
 
         self.movieText.insert(tk.END, "Movie Data")
         self.movieText.config(state=tk.DISABLED)
-        # Add widgets for displaying movie data
+
 
     def create_tv_show_tab(self):
         tv_show_tab = ttk.Frame(self.notebook)
         self.notebook.add(tv_show_tab, text="TV Shows")
-
+        # Add widgets for displaying TV show data
         self.tvText = tk.Text(tv_show_tab, width=100, height=20)
         self.tvText.grid(row=0, column=0, padx=10, pady=10)
 
         self.tvText.insert(tk.END, "TV Data")
         self.tvText.config(state=tk.DISABLED)
-        # Add widgets for displaying TV show data
+
 
     def create_book_tab(self):
         book_tab = ttk.Frame(self.notebook)
         self.notebook.add(book_tab, text="Books")
         # Add widgets for displaying book data
+        self.bookText = tk.Text(book_tab, width=100, height=20)
+        self.bookText.grid(row=0, column=0, padx=10, pady=10)
+
+        self.bookText.insert(tk.END, "Book Data")
+        self.bookText.config(state=tk.DISABLED)
 
     def create_search_tab(self):
         search_tab = ttk.Frame(self.notebook)
@@ -114,11 +119,17 @@ class RecommenderGUI:
         self.tvText.config(state=tk.NORMAL)
         self.tvText.delete(1.0, tk.END)
         self.tvText.insert(tk.END, self.tvList)
-        return
+
 
     def load_books(self):
         # Implement loading books
-        pass
+        self.recommender.loadBooks()
+        # movie
+        self.bookList = self.recommender.getBookList()
+        self.bookText.config(state=tk.NORMAL)
+        self.bookText.delete(1.0, tk.END)
+        self.bookText.insert(tk.END, self.bookList)
+
 
     def load_associations(self):
         # Implement loading associations
