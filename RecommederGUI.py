@@ -1,6 +1,6 @@
 # Author: Kartikey, Suqi Lu, Paul
 # Latest modified date: 5/1/2024
-# Description: UI of Recommender App
+# Description: GUI for project2
 
 from Recommender import Recommender
 import tkinter as tk
