@@ -34,6 +34,10 @@ class Recommender():
                 print("The file is not exist")
                 continue
         
+        # Make a copy, if it encounter error, then back up
+        copy = self.__book_dict.copy()
+        self.__book_dict = {}
+
         try:
             with open(filepath, "r") as file:
                 next(file)
@@ -60,9 +64,10 @@ class Recommender():
 
                     self.__book_dict[id] = newBook
         except Exception as e:
+
+            # if encounter any error, set the dictionary as last copy of data
+            self.__book_dict = copy
             print(e)
-            # if encounter any error, set the dictionary as empty
-            self.__book_dict = {}
     
     def loadShows(self):
         """
@@ -78,6 +83,11 @@ class Recommender():
             else:
                 print("The file is not exist")
                 continue
+
+        # Make a copy, if it encounter error, then back up
+        copy = self.__show_dict.copy()
+        self.__show_dict = copy
+
         try:
             with open(filepath, "r", encoding='utf-8') as file:
                 next(file)
@@ -106,9 +116,10 @@ class Recommender():
 
                     self.__show_dict[id] = newShow
         except Exception as e:
+
+            # if encounter any error, set the dictionary as last copy of data
+            self.__show_dict = copy
             print(e)
-            # if encounter any error, set the dictionary as empty
-            self.__show_dict= {}
 
     def loadAssociations(self):
         """
@@ -124,6 +135,10 @@ class Recommender():
             else:
                 print("The file is not exist")
                 continue
+
+        # Make a copy, if it encounter error, then back up
+        copy = self.__ass_dict.copy()
+        self.__ass_dict = {}
 
         try:
             with open(filepath, "r") as file:
@@ -158,9 +173,10 @@ class Recommender():
                         self.__ass_dict[id2][id1] = 1
 
         except Exception as e:
+
+            # if encounter any error, set the dictionary as last copy of data
+            self.__ass_dict = copy
             print(e)
-            # if encounter any error, set the dictionary as empty
-            self.__show_dict= {}
 
     def getMovieList(self):
         """
@@ -302,6 +318,7 @@ class Recommender():
         This function return statistics regarding movies
 
         Returns:
+        count(int): the number of TV shows
         rating_count(dictionary): the count of each type of rating. key is type, value is counts
         average_duration(float): the average duration of movies
         getMost(director_count)(string): the director who has directed the most movies
@@ -337,7 +354,7 @@ class Recommender():
         
         # uncomment this for testsing 
     
-        
+        """
         message = "Ratings:"
         print(message)
 
@@ -352,15 +369,16 @@ class Recommender():
         print("most director: " + getMost(director_count))
         print("most actor: " + getMost(actor_count))
         print("most genres: " + getMost(genres_count))
+        """
         
-    
-        return rating_count, average_duration, getMost(director_count), getMost(actor_count), getMost(genres_count)
+        return count, rating_count, average_duration, getMost(director_count), getMost(actor_count), getMost(genres_count)
 
     def getTVStats(self):
         """
         This function return statistics regarding TV Shows
 
         Returns:
+        count(int): the number of TV shows
         rating_count(dictionary): the count of each type of rating
         average_duration(float): the average duration of tv show
         getMost(actor_count)(string): the most prolific actor of tv show
@@ -393,7 +411,7 @@ class Recommender():
 
         # uncomment this for testing 
 
-        
+        """
         message = "Ratings:"
         print(message)
 
@@ -406,9 +424,9 @@ class Recommender():
         print("average seasons: " + str(average_duration))
         print("most actor: " + getMost(actor_count))
         print("most tv: " + getMost(genres_count))
+        """
         
-        
-        return rating_count, average_duration, getMost(actor_count), getMost(genres_count)
+        return count, rating_count, average_duration, getMost(actor_count), getMost(genres_count)
     
     def getBookStats(self):
         """
@@ -440,11 +458,11 @@ class Recommender():
 
         # uncomment this for testing 
 
-        
+        """
         print("average pages: " + str(average_page))
         print("most author: " + getMost(author_count))
         print("most publisher: " + getMost(publisher_count))
-        
+        """
         
         return average_page, getMost(author_count), getMost(publisher_count)
 
@@ -639,6 +657,7 @@ class Recommender():
         """
 
         type = type.strip().lower()
+        title = title.lower()
         # if no type is selected
         if type != "movie" and type != "tv show" and type != "book":
             messagebox.showerror(title="undefined media type", message="you need to select Movie, TV Show or Book first")
@@ -652,7 +671,7 @@ class Recommender():
             
             for id1, object1 in self.__show_dict.items():
                     
-                    if title in object1.get_title():
+                    if title in object1.get_title().lower():
                         
                         finded = 1
                         for id2, object2 in self.__ass_dict[id1].items():
@@ -665,7 +684,7 @@ class Recommender():
 
             for id1, object1 in self.__book_dict.items():
 
-                if title in object1.get_title():
+                if title in object1.get_title().lower():
 
                     finded = 1
 
@@ -744,30 +763,3 @@ def getMost(dict):
             most_object = object
 
     return most_object
-
-# for testing
-
-#aa = Recommender()
-#aa.loadShows()
-#aa.loadBooks()
-#aa.loadAssociations()
-
-#print(aa.getMovieList())
-#print(aa.getTVList())
-#print(aa.getBookList())
-
-#aa.getMovieStats()
-#aa.getTVStats()
-#aa.getBookStats()
-
-"""
-media_type = "movie"
-title = ""
-directors = ""
-actor = ""
-genre = ""
-aa.searchTVMovies("movie", title, directors, actor, genre)
-"""
-
-#print(aa.getRecommendations("b", "c"))
-#aa.getBookStats()
