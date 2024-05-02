@@ -488,12 +488,18 @@ class Recommender():
             message = "No Results"
             return message
         
+        # if data file not finded
+        if len(self.__show_dict) == 0 :
+            messagebox.showerror(title="data file not finded", message="you didn't import any Movie or TV Show file")
+            message = "No Results"
+            return message
+        
         # remove spaces
         type = type.lower()
-        title = title.strip()
-        directors = directors.strip()
-        actor = actor.strip()
-        genre = genre.strip()
+        title = title.strip().lower()
+        directors = directors.strip().lower()
+        actor = actor.strip().lower()
+        genre = genre.strip().lower()
 
         # If the strings representing title, director, actor, and genre are all empty, spawn ashowerror messagebox
         if title == "" and directors == "" and actor == "" and genre == "":
@@ -510,16 +516,16 @@ class Recommender():
             if object.get_type_show().lower() != type:
                 continue
 
-            if title not in object.get_title():
+            if title not in object.get_title().lower():
                 continue
             
-            if directors not in object.get_directors():
+            if directors not in object.get_directors().lower():
                 continue
             
-            if actor not in object.get_actors():
+            if actor not in object.get_actors().lower():
                 continue
             
-            if genre not in object.get_genres():
+            if genre not in object.get_genres().lower():
                 continue
             
             dict_copy[id] = object
@@ -580,13 +586,19 @@ class Recommender():
         """
 
         # remove spaces
-        title = title.strip()
-        author = author.strip()
-        publisher = publisher.strip()
+        title = title.strip().lower()
+        author = author.strip().lower()
+        publisher = publisher.strip().lower()
 
         # If the strings representing title, author, publisher are all empty, spawn ashowerror messagebox
         if title == "" and author == "" and publisher == "":
             messagebox.showerror(title="empty search", message="you need enter information for title, author, publisher first")
+            message = "No Results"
+            return message
+        
+        # if data file not finded
+        if len(self.__book_dict) == 0 :
+            messagebox.showerror(title="data file not finded", message="you didn't import any Books file")
             message = "No Results"
             return message
         
@@ -597,13 +609,13 @@ class Recommender():
         for id, object in self.__book_dict.items():
 
 
-            if title not in object.get_title():
+            if title not in object.get_title().lower():
                 continue
             
-            if author not in object.get_authors():
+            if author not in object.get_authors().lower():
                 continue
             
-            if publisher not in object.get_publisher():
+            if publisher not in object.get_publisher().lower():
                 continue
             
             dict_copy[id] = object
@@ -664,6 +676,12 @@ class Recommender():
             message = "No Results"
             return message
         
+        # if data file not finded
+        if len(self.__ass_dict) == 0 :
+            messagebox.showerror(title="data file not finded", message="you didn't import any Associations file")
+            message = "No Results"
+            return message
+        
         dict_temp = {} # create a empty dictionary to store objects for avoiding repeat recommendation
         finded = 0 # if not finded, then spawn error messagebox
 
@@ -713,6 +731,10 @@ class Recommender():
 def addToDict(object, dict):
     """
     helper function to put object into dictionary
+
+    Parameters:
+    object(anything): the object that need to store in dictionary
+    dict(dictionary): the target dictionary
     """
 
     if object in dict:
@@ -724,6 +746,10 @@ def addToDict(object, dict):
 def stripAndSplit(object, dict):
     """
     helper function for strip and split the information. Then add it to the dictionary
+
+    Parameters:
+    object(anything): the object that need to store in dictionary
+    dict(dictionary): the target dictionary
     """
     items = object.strip()
     if items != "":
@@ -734,6 +760,10 @@ def stripAndSplit(object, dict):
 def modifyInfo(info, len2):
     """
     helper function for adding infor and determine if it need adding extra space for padding
+
+    Parameters:
+    info(string): the message that need modified
+    len2(int): the max length of current title
 
     Returns:
     message(string): the modified message after add extra space
@@ -748,6 +778,9 @@ def modifyInfo(info, len2):
 def getMost(dict):
     """
     helper function for get most popular one
+
+    Parameters:
+    dict(dictionary): the target dictionary
 
     Returns:
     most_object(string): the most popular one in a dictionary
